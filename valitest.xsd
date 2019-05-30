@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="srcset" type="TestSetType"/>
+
+  <xs:complexType name="DocumentType">
+    <xs:sequence>
+      <xs:element name="seg" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="id" type="xs:string"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="docid" type="xs:string"/>
+    <xs:attribute name="origlang" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="TestSetType">
+    <xs:sequence>
+      <xs:element name="doc" type="DocumentType" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="setid" type="xs:string"/>
+    <xs:attribute name="srclang" type="xs:string"/>
+  </xs:complexType>
+
+</xs:schema>
