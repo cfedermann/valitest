@@ -7,4 +7,4 @@ Validatable test sets for machine translation
 
 ## License
 
-OCELoT is released under [BSD 3-Clause License](https://github.com/cfedermann/valitest/blob/master/LICENSE)
+`valitest` is released under [BSD 3-Clause License](https://github.com/cfedermann/valitest/blob/master/LICENSE)
