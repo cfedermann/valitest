@@ -2,7 +2,7 @@
 valitest: validatable test sets for machine translation
 """
 
-from xml.etree import ElementTree
+import xml
 
 import xmlschema
 
@@ -27,12 +27,14 @@ class ValidatableTestSet:
 
         try:
             self.__schema.validate(xml_path)
+            self.__xmldoc = xml.etree.ElementTree.parse(xml_path)
 
-        except xmlschema.XMLSchemaValidationError as error:
+        # pylint: disable-msg=bad-continuation
+        except (
+            xmlschema.XMLSchemaValidationError,
+            xml.etree.ElementTree.ParseError,
+        ) as error:
             raise ValueError(error)
-
-        finally:
-            self.__xmldoc = ElementTree.parse(xml_path)
 
         # XML is valid, so setid and srclang do exist
         _root = self.__xmldoc.getroot()
