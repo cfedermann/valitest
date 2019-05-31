@@ -4,6 +4,8 @@ valitest: validatable test sets for machine translation
 
 import xml
 
+from os.path import basename
+
 import xmlschema
 
 
@@ -28,6 +30,7 @@ class ValidatableTestSet:
         try:
             self.__schema.validate(xml_path)
             self.__xmldoc = xml.etree.ElementTree.parse(xml_path)
+            self.__xml_path = basename(xml_path)
 
         # pylint: disable-msg=bad-continuation
         except (
@@ -40,6 +43,11 @@ class ValidatableTestSet:
         _root = self.__xmldoc.getroot()
         self.__setid = _root.attrib['setid']
         self.__srclang = _root.attrib['srclang']
+
+    @property
+    def xml_path(self):
+        """Gets XML path for this test set."""
+        return self.__xml_path
 
     @property
     def setid(self):
@@ -57,6 +65,6 @@ class ValidatableTestSet:
 
     def __repr__(self):
         """Machine readable representation."""
-        return 'ValidatableTestSet(setid={0!r}, srclang={1!r})'.format(
-            self.setid, self.srclang
+        return 'ValidatableTestSet(xml_path={0!r})'.format(
+            self.xml_path
         )
