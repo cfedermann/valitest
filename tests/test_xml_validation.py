@@ -31,13 +31,25 @@ class TestXMLValidation(unittest.TestCase):
         with self.assertRaises(urllib.error.URLError):
             _ = xmlschema.XMLSchema('does-not-exist.xsd')
 
-    def test_does_not_validate_invalid_sgml_file(self):
+    def test_does_not_validate_invalid_files(self):
         """Checks if we raise for invalid SGML file"""
-        with self.assertRaises(xml.etree.ElementTree.ParseError):
-            sgml_file = join(
-                getcwd(), 'testdata', 'newstest2019-defr-src-ts.de.sgm'
-            )
-            _ = valitest.ValidatableTestSet(sgml_file)
+        bad_files = (
+            'newstest2019-defr-src-ts.de.sgm',
+            'newstest2019-defr-src-ts.de.xml',
+        )
+        for bad_file in bad_files:
+            bad_path = join(getcwd(), 'testdata', bad_file)
+            with self.assertRaises(xml.etree.ElementTree.ParseError):
+                _ = valitest.ValidatableTestSet(bad_path)
+
+    def test_does_validate_valid_xml_file(self):
+        """Checks if we can load valid XML file"""
+        xml_file = join(
+            getcwd(), 'testdata', 'newstest2019-defr-src-ts.de.FIXED.xml'
+        )
+        doc = valitest.ValidatableTestSet(xml_file)
+        self.assertEqual(doc.setid, "newstest2019")
+        self.assertEqual(doc.srclang, "any")
 
 
 if __name__ == "__main__":
