@@ -11,7 +11,11 @@ from os.path import join
 import xmlschema
 
 # pylint: disable-msg=no-name-in-module
-from context import valitest
+try:
+    from context import valitest
+
+except ImportError:
+    from .context import valitest
 
 
 class TestXMLValidation(unittest.TestCase):
