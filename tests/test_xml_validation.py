@@ -47,6 +47,7 @@ class TestXMLValidation(unittest.TestCase):
         xml_file = join(
             getcwd(), 'testdata', 'newstest2019-defr-src-ts.de.FIXED.xml'
         )
+        print(xml_file)
         doc = valitest.ValidatableTestSet(xml_file)
         self.assertEqual(doc.setid, "newstest2019")
         self.assertEqual(doc.srclang, "any")
