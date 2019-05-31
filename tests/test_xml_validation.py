@@ -3,19 +3,13 @@ valitest: validatable test sets for machine translation
 """
 import unittest
 import urllib
-import xml
 
 from os import getcwd
 from os.path import join
 
 import xmlschema
 
-# pylint: disable-msg=no-name-in-module
-try:
-    from context import valitest
-
-except ImportError:
-    from .context import valitest
+from .context import valitest
 
 
 class TestXMLValidation(unittest.TestCase):
@@ -43,7 +37,7 @@ class TestXMLValidation(unittest.TestCase):
         )
         for bad_file in bad_files:
             bad_path = join(getcwd(), 'testdata', bad_file)
-            with self.assertRaises(xml.etree.ElementTree.ParseError):
+            with self.assertRaises(ValueError):
                 _ = valitest.ValidatableTestSet(bad_path)
 
     def test_does_validate_valid_xml_file(self):
