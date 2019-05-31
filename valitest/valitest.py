@@ -2,6 +2,8 @@
 valitest: validatable test sets for machine translation
 """
 
+from xml.etree import ElementTree
+
 import xmlschema
 
 
@@ -14,32 +16,38 @@ class ValidatableTestSet:
     validation of test sets and corresponding translation outputs.
     """
 
-    def __init__(self, setid, srclang):
-        """Load schema for validation."""
-        self.schema = xmlschema.XMLSchema('valitest.xsd')
+    def __init__(self, xml_path):
+        """
+        Creates validatable test set from given XML path.
 
-        self.__setid = setid
-        self.__srclang = srclang
+        Validates contents from XML file against valitest XSD schema.
+        """
+        # Load XSD schema for document validation
+        self.__schema = xmlschema.XMLSchema('valitest.xsd')
+
+        try:
+            self.__schema.validate(xml_path)
+
+        except xmlschema.XMLSchemaValidationError as error:
+            raise ValueError(error)
+
+        finally:
+            self.__xmldoc = ElementTree.parse(xml_path)
+
+        # XML is valid, so setid and srclang do exist
+        _root = self.__xmldoc.getroot()
+        self.__setid = _root.attrib['setid']
+        self.__srclang = _root.attrib['srclang']
 
     @property
     def setid(self):
         """Gets set id for this test set."""
         return self.__setid
 
-    @setid.setter
-    def setid(self, val):
-        """Sets set id for this test set."""
-        self.__setid = val
-
     @property
     def srclang(self):
         """Gets srclang for this test set."""
         return self.__srclang
-
-    @srclang.setter
-    def srclang(self, val):
-        """Sets srclang for this test set."""
-        self.__srclang = val
 
     def __str__(self):
         """Human readable representation."""
@@ -47,6 +55,6 @@ class ValidatableTestSet:
 
     def __repr__(self):
         """Machine readable representation."""
-        return 'ValidatableTestSet(setid={0}, srclang={1})'.format(
+        return 'ValidatableTestSet(setid={0!r}, srclang={1!r})'.format(
             self.setid, self.srclang
         )
